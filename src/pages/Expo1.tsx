@@ -1,5 +1,5 @@
 // Replace with your actual background image path
-const backgroundImg = "public/Expo 2026.png";
+const backgroundImg = "/Expo 2026.png";
 
 const Expo1 = () => {
   return (

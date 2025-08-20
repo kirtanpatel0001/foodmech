@@ -54,7 +54,7 @@ const Home = () => {
           <div className="flex flex-col gap-6 items-center">
             <div className="flex items-center gap-4">
               <div className="p-3  rounded-md " style={{marginLeft: '5px'}}>
-                <img src="public/11.png" alt="calendar" width={36} height={36} />
+                <img src="/11.png" alt="calendar" width={36} height={36} />
               </div>
               <div className="text-left" style={{ fontFamily: 'Poppins, sans-serif', fontSize: 16 }}>
                 <div className="font-bold text-black">6–9 February , 2026</div>
@@ -63,7 +63,7 @@ const Home = () => {
 
             <div className="flex items-center gap-4">
               <div className="p-3  rounded-md " style={{marginLeft: '35px'}}>
-                <img src="public/location.png" alt="location" width={32} height={32} />
+                <img src="/location.png" alt="location" width={32} height={32} />
               </div>
               <div className="text-left" style={{ fontFamily: 'Poppins, sans-serif', fontSize: 16 }}>
                 <div className="font-bold text-black">Vanita Vishram Ground</div>

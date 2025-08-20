@@ -3,6 +3,7 @@
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Expo1 from './pages/Expo1';
+import Highlight from './pages/Highlight';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
             <>
               <Home />
               <Expo1 />
+              <Highlight />
             </>
           } />
         </Routes>
