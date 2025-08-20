@@ -15,11 +15,11 @@ const Expo1 = () => {
       <div className="relative z-10 flex items-center justify-center">
         {/* Pink accent borders */}
         <img
-    src="/Rectangle 28.png"
+    src="/Rectangle 2.png"
     alt="Decorative"
     className="w-80 h-auto absolute -top-6 -right-6"
     />
-    <img src="/Rectangle 27.png" alt="Decorative" className="w-80 h-auto absolute -bottom-6 -left-6" />
+    <img src="/Rectangle 1.png" alt="Decorative" className="w-80 h-auto absolute -bottom-6 -left-6" />
         {/* <div className="absolute -bottom-6 -left-6 w-2/3 h-4 rounded-tl-2xl rounded-br-2xl bg-pink-600" style={{ borderTopRightRadius: '20px', borderBottomLeftRadius: '20px' }}></div> */}
         {/* Main Card */}
         <div className="relative bg-white rounded-xl shadow-lg px-8 py-10 max-w-2xl text-center">

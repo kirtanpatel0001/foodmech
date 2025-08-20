@@ -5,21 +5,21 @@ import "../App.css";
 import "../index.css";
 
 const highlights = [
-  { src: "public/images/img_dsc01670_fgj1nc9kdz_2.png", alt: "Highlight 1" },
-  { src: "public/images/img_dsc01670_fgj1nc9kdz_1.png", alt: "Highlight 2" },
-  { src: "public/images/img_dsc01670_fgj1nc9kdz_3.png", alt: "Highlight 3" },
-  { src: "public/images/img_dsc01670_fgj1nc9kdz_4.png", alt: "Highlight 4" },
-  { src: "public/images/img_dsc01670_fgj1nc9kdz_290x520.png", alt: "Highlight 5" },
+  { src: "/images/img_dsc01670_fgj1nc9kdz_2.png", alt: "Highlight 1" },
+  { src: "/images/img_dsc01670_fgj1nc9kdz_1.png", alt: "Highlight 2" },
+  { src: "/images/img_dsc01670_fgj1nc9kdz_3.png", alt: "Highlight 3" },
+  { src: "/images/img_dsc01670_fgj1nc9kdz_4.png", alt: "Highlight 4" },
+  { src: "/images/img_dsc01670_fgj1nc9kdz_290x520.png", alt: "Highlight 5" },
 ];
 
 export default function Highlight() {
   const [active, setActive] = useState(1); // index of the center image
 
-  // show each image for 5 seconds
+  // show each image for 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % highlights.length);
-    }, 6000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
