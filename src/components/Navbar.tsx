@@ -19,14 +19,14 @@ const Navbar = () => {
       </div>
       <div className="flex items-center space-x-6">
   {/* <Link to="/" className="font-bold text-sm hover:text-pink-600">Home</Link> */}
-    <a href="#top" onClick={scrollToTop} className="font-bold text-sm hover:text-pink-600">Home</a>
+  <a href="#top" onClick={scrollToTop} className="font-bold text-sm hover:text-pink-600">Home</a>
 
-        <a href="#" className="font-bold text-sm hover:text-pink-600">Benefits</a>
-        <a href="#" className="font-bold text-sm hover:text-pink-600">Testimonial</a>
-        <a href="#" className="font-bold text-sm hover:text-pink-600">Our Sponsors</a>
-        <a href="#" className="font-bold text-sm hover:text-pink-600">Become Sponsor</a>
-        <a href="#" className="font-bold text-sm hover:text-pink-600">Blog</a>
-        <a href="#" className="font-bold text-sm hover:text-pink-600">Visitor</a>
+  <a href="#" className="font-bold text-sm hover:text-pink-600">Benefits</a>
+  <a href="#" className="font-bold text-sm hover:text-pink-600">Testimonial</a>
+  <a href="#" className="font-bold text-sm hover:text-pink-600">Our Sponsors</a>
+  <a href="#" className="font-bold text-sm hover:text-pink-600">Become Sponsor</a>
+  <Link to="/blog" className="font-bold text-sm hover:text-pink-600">Blog</Link>
+  <Link to="/visitor" className="font-bold text-sm hover:text-pink-600">Visitor</Link>
   <Link to="/bookstall" className="ml-4 px-5 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600 transition-all border-2 border-black">Book Stall</Link>
       </div>
     </nav>

@@ -72,10 +72,18 @@ const Home = () => {
             </div>
             {/* Buttons */}
             <div className="flex flex-col gap-4 items-center">
-              <button className="px-8 py-3 rounded-lg bg-lime-400 text-white font-bold border-2 border-lime-600 shadow-md hover:bg-lime-500 transition-all w-44" style={{boxShadow:'0 6px 12px 0 #b6d43a'}}>
+              <button
+                className="px-8 py-3 rounded-lg bg-lime-400 text-white font-bold border-2 border-lime-600 shadow-md hover:bg-lime-500 transition-all w-44"
+                style={{boxShadow:'0 6px 12px 0 #b6d43a'}}
+                onClick={() => window.location.href = '/bookstall'}
+              >
                 Book Now
               </button>
-              <button className="px-8 py-3 rounded-lg bg-yellow-400 text-white font-bold border-2 border-yellow-600 shadow-md hover:bg-yellow-500 transition-all w-44" style={{boxShadow:'0 6px 12px 0 #f7d13b'}}>
+              <button
+                className="px-8 py-3 rounded-lg bg-yellow-400 text-white font-bold border-2 border-yellow-600 shadow-md hover:bg-yellow-500 transition-all w-44"
+                style={{boxShadow:'0 6px 12px 0 #f7d13b'}}
+                onClick={() => window.location.href = '/visitor'}
+              >
                 Visitor Pass
               </button>
             </div>
