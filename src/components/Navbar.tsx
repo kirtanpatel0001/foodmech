@@ -1,14 +1,44 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
+
+
+function TestimonialLink() {
+  const navigate = useNavigate();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/#feedback-section');
+  };
+  return (
+    <a
+      href="/#feedback-section"
+      className="font-bold text-sm hover:text-pink-600"
+      onClick={handleClick}
+    >
+      Testimonial
+    </a>
+  );
+}
+
+function HomeLink() {
+  const navigate = useNavigate();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/#top');
+  };
+  return (
+    <a
+      href="/#top"
+      className="font-bold text-sm hover:text-pink-600"
+      onClick={handleClick}
+    >
+      Home
+    </a>
+  );
+}
 
 const Navbar = () => {
-  const scrollToTop = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById('top');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    else window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+
 
   return (
   <nav className="w-full bg-white flex items-center justify-between px-8 py-2 font-[Kantumruy_Pro] text-[16px] shadow-md sticky top-0 z-50">
@@ -19,10 +49,10 @@ const Navbar = () => {
       </div>
       <div className="flex items-center space-x-6">
   {/* <Link to="/" className="font-bold text-sm hover:text-pink-600">Home</Link> */}
-  <a href="#top" onClick={scrollToTop} className="font-bold text-sm hover:text-pink-600">Home</a>
+  <HomeLink />
 
   <a href="#" className="font-bold text-sm hover:text-pink-600">Benefits</a>
-  <a href="#" className="font-bold text-sm hover:text-pink-600">Testimonial</a>
+  <TestimonialLink />
   <a href="#" className="font-bold text-sm hover:text-pink-600">Our Sponsors</a>
   <a href="#" className="font-bold text-sm hover:text-pink-600">Become Sponsor</a>
   <Link to="/blog" className="font-bold text-sm hover:text-pink-600">Blog</Link>

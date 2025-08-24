@@ -31,7 +31,7 @@ const BookStall: React.FC = () => {
         <img
           src="/images/img_background_square.svg"
           alt="background pattern"
-          className="w-[1200px] h-[900px] object-cover opacity-90  left-[-200px] top-[-100px] absolute"
+          className="w-[1300px] h-[900px] object-cover opacity-90  left-[-200px] top-[-100px] absolute"
           style={{ left: '105px', top: '0px' }}
         />
         {/* Decorative SVGs for design */}

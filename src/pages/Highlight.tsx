@@ -26,13 +26,13 @@ export default function Highlight() {
   // active index controls which image is center; images animate based on their delta from active
 
   return (
-  <div className="flex flex-col items-center justify-start bg-white w-full" style={{ minHeight: 640, paddingTop: 60 }}>
-      <h2 className="text-3xl font-bold text-center mb-10" style={{ paddingTop: 20 }}>
+  <div className="flex flex-col items-center justify-start bg-white w-full" style={{ minHeight: 640, paddingTop: 20 }}>
+      <h2 className="text-3xl font-bold text-center mb-10" style={{ paddingTop: 50 }}>
         Showcasing the Highlights of Our Exhibitions
       </h2>
 
-      <div className="relative w-full flex justify-center items-center" style={{ height: 480, perspective: 1200 }}>
-        <div className="relative flex items-center justify-center" style={{ width: '100%', maxWidth: 1000, height: 480 }}>
+      <div className="relative w-full flex justify-center items-center" style={{ height: 680, perspective: 1200 }}>
+        <div className="relative flex items-center justify-center" style={{ width: '100%', maxWidth: 1000, height: 680 }}>
           {highlights.map((img, i) => {
             const n = highlights.length;
             let delta = i - active;
