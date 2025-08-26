@@ -21,7 +21,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
   const [editForm, setEditForm] = useState<Entry | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = "https://foodmech.onrender.com";
   // Handle delete (works for both bookstall and sponsor)
   const handleDelete = async (id: string | undefined, idx?: number, type: 'bookstall' | 'sponsor' = 'bookstall') => {
     if (!id) return;
