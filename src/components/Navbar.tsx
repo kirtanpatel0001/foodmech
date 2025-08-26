@@ -38,8 +38,7 @@ function HomeLink() {
 }
 
 const Navbar = () => {
-
-
+  const navigate = useNavigate();
   return (
   <nav className="w-full bg-white flex items-center justify-between px-8 py-2 font-[Kantumruy_Pro] text-[16px] shadow-md sticky top-0 z-50">
       <div className="flex items-center">
@@ -51,10 +50,28 @@ const Navbar = () => {
   {/* <Link to="/" className="font-bold text-sm hover:text-pink-600">Home</Link> */}
   <HomeLink />
 
-  <a href="#" className="font-bold text-sm hover:text-pink-600">Benefits</a>
+  <a
+    href="/#exhibition-benefits-section"
+    className="font-bold text-sm hover:text-pink-600"
+    onClick={e => { e.preventDefault(); navigate('/#exhibition-benefits-section'); }}
+  >
+    Benefits
+  </a>
   <TestimonialLink />
-  <a href="#" className="font-bold text-sm hover:text-pink-600">Our Sponsors</a>
-  <a href="#" className="font-bold text-sm hover:text-pink-600">Become Sponsor</a>
+  <a
+    href="/#sponsors-section"
+    className="font-bold text-sm hover:text-pink-600"
+    onClick={e => { e.preventDefault(); navigate('/#sponsors-section'); }}
+  >
+    Our Sponsors
+  </a>
+  <a
+    href="/#become-sponsor-section"
+    className="font-bold text-sm hover:text-pink-600"
+    onClick={e => { e.preventDefault(); navigate('/#become-sponsor-section'); }}
+  >
+    Become Sponsor
+  </a>
   <Link to="/blog" className="font-bold text-sm hover:text-pink-600">Blog</Link>
   <Link to="/visitor" className="font-bold text-sm hover:text-pink-600">Visitor</Link>
   <Link to="/bookstall" className="ml-4 px-5 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600 transition-all border-2 border-black">Book Stall</Link>

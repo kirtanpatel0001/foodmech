@@ -1,3 +1,56 @@
+// Sponsor Schema and Model
+const sponsorSchema = new mongoose.Schema({
+  fullName: String,
+  businessName: String,
+  city: String,
+  contactNumber: String,
+  email: String,
+  message: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Sponsor = mongoose.model('Sponsor', sponsorSchema);
+
+// POST: Save a new sponsor form
+app.post('/api/sponsor', async (req, res) => {
+  try {
+    const data = new Sponsor(req.body);
+    await data.save();
+    res.status(201).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET: Get all sponsor submissions
+app.get('/api/sponsor', async (req, res) => {
+  try {
+    const all = await Sponsor.find().sort({ createdAt: -1 });
+    res.json(all);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE: Delete a sponsor submission by ID
+app.delete('/api/sponsor/:id', async (req, res) => {
+  try {
+    await Sponsor.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// PUT: Update a sponsor submission by ID
+app.put('/api/sponsor/:id', async (req, res) => {
+  try {
+    const updated = await Sponsor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ success: true, data: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';

@@ -24,6 +24,7 @@ import OurExhibitors from './pages/Our Exhibitors';
 import ExhibitionBenefits from './pages/ExhibitionBenefits';
 import Exhibitionunder from './pages/Exhibitionunder';
 import Information from './pages/Information';
+import SponsorBecome from './pages/sponsserbecome';
 
 function ScrollToHash() {
   const { hash } = useLocation();
@@ -73,9 +74,15 @@ export default function App() {
                       <Information />
                       <Exhibition />
                       <Exhibitionunder />
-                      <Sponsors />
-                      <ExhibitionBenefits />
-                      <BookStall />
+                      <div id="sponsors-section">
+                        <Sponsors />
+                      </div>
+                      <div id="exhibition-benefits-section">
+                        <ExhibitionBenefits />
+                      </div>
+                      <div id="become-sponsor-section">
+                        <SponsorBecome />
+                      </div>
                       <Partners />
                       <OurExhibitors />
                       <div id="feedback-section">
