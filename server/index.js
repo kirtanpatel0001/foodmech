@@ -4,7 +4,17 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
 app.use(express.json());
 
 const mongoUri = 'mongodb+srv://Foodmechadmin:admin123foodmech@cluster0.6xehgl3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -44,6 +54,7 @@ app.post('/api/bookstall', async (req, res) => {
     await data.save();
     res.status(201).json({ success: true });
   } catch (err) {
+    console.error('POST /api/bookstall error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -68,6 +79,7 @@ app.put('/api/bookstall/:id', async (req, res) => {
     const updated = await BookStall.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json({ success: true, data: updated });
   } catch (err) {
+    console.error('PUT /api/bookstall/:id error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -79,6 +91,7 @@ app.post('/api/sponsor', async (req, res) => {
     await data.save();
     res.status(201).json({ success: true });
   } catch (err) {
+    console.error('POST /api/sponsor error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -103,6 +116,7 @@ app.put('/api/sponsor/:id', async (req, res) => {
     const updated = await Sponsor.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json({ success: true, data: updated });
   } catch (err) {
+    console.error('PUT /api/sponsor/:id error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
