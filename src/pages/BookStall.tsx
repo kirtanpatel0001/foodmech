@@ -10,10 +10,34 @@ const BookStall: React.FC = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log(formData);
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+    try {
+      const res = await fetch('http://localhost:5000/api/bookstall', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setSuccess(true);
+        setFormData({
+          fullName: '', businessName: '', city: '', contactNumber: '', email: '', message: ''
+        });
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Submission failed');
+      }
+    } catch {
+      setError('Network error');
+    }
+    setLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -58,6 +82,8 @@ const BookStall: React.FC = () => {
               </a>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {success && <div className="text-green-600 text-center font-semibold">Thank you! Your submission has been received.</div>}
+              {error && <div className="text-red-600 text-center font-semibold">{error}</div>}
               <input
                 type="text"
                 name="fullName"
@@ -112,9 +138,10 @@ const BookStall: React.FC = () => {
               />
               <button
                 type="submit"
-                className="w-full bg-green-300 text-black py-3 px-6 rounded-md hover:bg-green-400 transition-colors font-semibold"
+                className="w-full bg-green-300 text-black py-3 px-6 rounded-md hover:bg-green-400 transition-colors font-semibold disabled:opacity-60"
+                disabled={loading}
               >
-                Submit
+                {loading ? 'Submitting...' : 'Submit'}
               </button>
             </form>
           </div>

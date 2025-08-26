@@ -83,11 +83,12 @@ const Footer: React.FC = () => {
           <div className="flex items-center gap-2 mb-1">
             <img src="/images/img_phone.svg" alt="Phone" className="w-5 h-5" />
             <a href="tel:+919898072103" >+91 98980 72103</a>
+            <button onClick={() => window.open('http://localhost:5173/admin', '_blank')}>Admin Panel  </button>
           </div>
         </div>
 
         {/* Decorative dots top right */}
-        <img src="/images/img_dot.svg" alt="dots" className="absolute right-16 top-8 w-24 h-8" />
+        
       </div>
 
       {/* Bottom copyright bar */}

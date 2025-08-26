@@ -11,8 +11,10 @@ import PrivacyPolicy from './pages/Privacy Policy';
 import ContactUs from './pages/Contact Us';
 import Blog from './pages/Blog';
 import Visitor from './pages/Visitor';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation,  } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import AdminLogin from './pages/AdminLogin';
+import AdminPanel from './pages/AdminPanel';
 import Sponsors from './pages/Sponsors';
 import VideoSchedule from './pages/VideoSchedule';
 import Exhibition from './pages/Exhibition';
@@ -21,6 +23,7 @@ import Partners from './pages/Partners';
 import OurExhibitors from './pages/Our Exhibitors';
 import ExhibitionBenefits from './pages/ExhibitionBenefits';
 import Exhibitionunder from './pages/Exhibitionunder';
+import Information from './pages/Information';
 
 function ScrollToHash() {
   const { hash } = useLocation();
@@ -38,40 +41,60 @@ function ScrollToHash() {
 }
 
 export default function App() {
+  const [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('foodmech_admin') === 'true');
+
+  const handleLogin = () => setIsAdmin(true);
+  const handleSignOut = () => setIsAdmin(false);
+
   return (
     <>
       <BrowserRouter>
         <ScrollToHash />
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={
-              <>
-                <Home />
-                <Expo1 />
-                <Highlight />
-                <VideoSchedule />
-                <Exhibition />
-                <Exhibitionunder />
-                <Sponsors />
-                <ExhibitionBenefits />
-                <BookStall />
-                <Partners />
-                <OurExhibitors />
-                <div id="feedback-section">
-                  <Feedback />
-                </div>
-              </>
-            } />
-            <Route path="/bookstall" element={<BookStall />} />
-            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/visitor" element={<Visitor />} />
-          </Routes>
-        </main>
+        {/* Hide Navbar/Footer on admin routes */}
+        <Routes>
+          <Route path="/admin" element={
+            isAdmin ? (
+              <AdminPanel onSignOut={handleSignOut} />
+            ) : (
+              <AdminLogin onLogin={handleLogin} />
+            )
+          } />
+          <Route path="/*" element={
+            <>
+              <Navbar />
+              <main>
+                <Routes>
+                  <Route path="/" element={
+                    <>
+                      <Home />
+                      <Expo1 />
+                      <Highlight />
+                      <VideoSchedule />
+                      <Information />
+                      <Exhibition />
+                      <Exhibitionunder />
+                      <Sponsors />
+                      <ExhibitionBenefits />
+                      <BookStall />
+                      <Partners />
+                      <OurExhibitors />
+                      <div id="feedback-section">
+                        <Feedback />
+                      </div>
+                    </>
+                  } />
+                  <Route path="/bookstall" element={<BookStall />} />
+                  <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                  <Route path="/contactus" element={<ContactUs />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/visitor" element={<Visitor />} />
+                </Routes>
+              </main>
+              <Footer />
+            </>
+          } />
+        </Routes>
       </BrowserRouter>
-      <Footer />
     </>
   );
 }
