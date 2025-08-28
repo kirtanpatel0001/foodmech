@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import * as XLSX from 'xlsx';
 
 export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
@@ -13,8 +13,11 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
     message: string;
     createdAt?: string;
   };
-  const [bookStallData, setBookStallData] = useState<Entry[]>([]);
-  const [sponsorData, setSponsorData] = useState<Entry[]>([]);
+  type ExtendedEntry = Entry & { createdDateString?: string; nameLower?: string };
+  const [bookStallData, setBookStallData] = useState<ExtendedEntry[]>([]);
+  const [sponsorData, setSponsorData] = useState<ExtendedEntry[]>([]);
+  const bookstallLoadedRef = useRef(false);
+  const sponsorLoadedRef = useRef(false);
   const [deletingIdx, setDeletingIdx] = useState<number | null>(null);
   const [pageFade, setPageFade] = useState<'in' | 'out'>('in');
   const [editIdx, setEditIdx] = useState<number | null>(null);
@@ -28,13 +31,16 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
     if (!window.confirm('Are you sure you want to delete this entry?')) return;
     setDeletingIdx(idx ?? null);
     setActionLoading(true);
-    setTimeout(async () => {
+    try {
       await fetch(`${API_BASE}/api/${type}/${id}`, { method: 'DELETE' });
       if (type === 'bookstall') await fetchBookStall();
       if (type === 'sponsor') await fetchSponsor();
+    } catch (e) {
+      console.error(e);
+    } finally {
       setDeletingIdx(null);
       setActionLoading(false);
-    }, 400);
+    }
   };
 
   // Handle edit (works for both bookstall and sponsor)
@@ -70,50 +76,87 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
     setEditForm(null);
     setShowModal(false);
   };
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  // Separate loading / error states per dataset to avoid blocking UI when only one view is loading
+  const [loadingBookstall, setLoadingBookstall] = useState(false);
+  const [loadingSponsor, setLoadingSponsor] = useState(false);
+  const [errorBookstall, setErrorBookstall] = useState('');
+  const [errorSponsor, setErrorSponsor] = useState('');
 
-  const fetchBookStall = async () => {
-    setLoading(true);
-    setError('');
+  // Search debounce to avoid filtering every keystroke
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchTerm), 250);
+    return () => clearTimeout(t);
+  }, [searchTerm]);
+
+  const processEntries = useCallback((data: Entry[] = []): ExtendedEntry[] => data.map(d => ({
+    ...d,
+    createdDateString: d.createdAt ? new Date(d.createdAt).toLocaleDateString() : '',
+    nameLower: (d.fullName || '').toLowerCase(),
+  })), []);
+
+  const fetchBookStall = useCallback(async (force = false) => {
+    if (!force && bookstallLoadedRef.current) return;
+    const shouldShowLoading = force || !bookstallLoadedRef.current;
+    if (shouldShowLoading) {
+      setLoadingBookstall(true);
+      setErrorBookstall('');
+    }
     try {
       const res = await fetch(`${API_BASE}/api/bookstall`);
       if (!res.ok) throw new Error('Failed to fetch');
-      const data = await res.json();
-      setBookStallData(data);
-    } catch {
-      setError('Could not load Book Stall data');
+      const data: Entry[] = await res.json();
+      setBookStallData(processEntries(data || []));
+      bookstallLoadedRef.current = true;
+    } catch (e) {
+      setErrorBookstall('Could not load Book Stall data');
+      console.error(e);
+    } finally {
+      if (shouldShowLoading) setLoadingBookstall(false);
     }
-    setLoading(false);
-  };
+  }, [processEntries]);
 
-  const fetchSponsor = async () => {
-    setLoading(true);
-    setError('');
+  const fetchSponsor = useCallback(async (force = false) => {
+    if (!force && sponsorLoadedRef.current) return;
+    const shouldShowLoading = force || !sponsorLoadedRef.current;
+    if (shouldShowLoading) {
+      setLoadingSponsor(true);
+      setErrorSponsor('');
+    }
     try {
       const res = await fetch(`${API_BASE}/api/sponsor`);
       if (!res.ok) throw new Error('Failed to fetch');
-      const data = await res.json();
-      setSponsorData(data);
-    } catch {
-      setError('Could not load Sponsor data');
+      const data: Entry[] = await res.json();
+      setSponsorData(processEntries(data || []));
+      sponsorLoadedRef.current = true;
+    } catch (e) {
+      setErrorSponsor('Could not load Sponsor data');
+      console.error(e);
+    } finally {
+      if (shouldShowLoading) setLoadingSponsor(false);
     }
-    setLoading(false);
-  };
+  }, [processEntries]);
 
   // Auto-refresh Book Stall/Sponsor data every 2 minutes when viewing
   React.useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (view === 'bookstall') {
-      fetchBookStall();
-      interval = setInterval(fetchBookStall, 120000);
+      fetchBookStall(true);
+      interval = setInterval(() => fetchBookStall(true), 120000);
     }
     if (view === 'sponsor') {
-      fetchSponsor();
-      interval = setInterval(fetchSponsor, 120000);
+      fetchSponsor(true);
+      interval = setInterval(() => fetchSponsor(true), 120000);
     }
     return () => interval && clearInterval(interval);
-  }, [view]);
+  }, [view, fetchBookStall, fetchSponsor]);
+
+  // Prefetch both datasets on mount so switching views feels instant
+  useEffect(() => {
+    fetchBookStall(true);
+    fetchSponsor(true);
+  }, [fetchBookStall, fetchSponsor]);
 
   // Animate page transitions
   const handleSetView = (v: typeof view) => {
@@ -121,6 +164,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
     setTimeout(() => {
       setView(v);
       setPageFade('in');
+      setPage(1); // reset pagination when switching views
     }, 350);
   };
 
@@ -128,30 +172,57 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
 
   // Filter state and logic
   // Filter states
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState(''); // kept for compatibility with existing controlled input names
   const [dateFilter, setDateFilter] = useState('');
   const [cityFilter, setCityFilter] = useState('');
 
-  // Unique values for dropdowns (bookstall)
-  const uniqueDates = Array.from(new Set(bookStallData.map(row => row.createdAt ? new Date(row.createdAt).toLocaleDateString() : ''))).filter(Boolean);
-  const uniqueCities = Array.from(new Set(bookStallData.map(row => row.city))).filter(Boolean);
-  // Unique values for dropdowns (sponsor)
-  const uniqueSponsorDates = Array.from(new Set(sponsorData.map(row => row.createdAt ? new Date(row.createdAt).toLocaleDateString() : ''))).filter(Boolean);
-  const uniqueSponsorCities = Array.from(new Set(sponsorData.map(row => row.city))).filter(Boolean);
+  // Pagination
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 12;
 
-  // Filtered data
-  const filteredBookStall = bookStallData.filter(row => {
-    const nameMatch = row.fullName.toLowerCase().includes(filter.toLowerCase());
-    const dateMatch = dateFilter ? (row.createdAt && new Date(row.createdAt).toLocaleDateString() === dateFilter) : true;
-    const cityMatch = cityFilter ? row.city === cityFilter : true;
-    return nameMatch && dateMatch && cityMatch;
-  });
-  const filteredSponsor = sponsorData.filter(row => {
-    const nameMatch = row.fullName.toLowerCase().includes(filter.toLowerCase());
-    const dateMatch = dateFilter ? (row.createdAt && new Date(row.createdAt).toLocaleDateString() === dateFilter) : true;
-    const cityMatch = cityFilter ? row.city === cityFilter : true;
-    return nameMatch && dateMatch && cityMatch;
-  });
+  // Keep search term in sync with legacy `filter` input
+  useEffect(() => setSearchTerm(filter), [filter]);
+
+  // Unique values for dropdowns (bookstall)
+  // Memoized unique filters and filtered lists to avoid recomputation on unrelated re-renders
+  const uniqueDates = useMemo(() => Array.from(new Set(bookStallData.map(row => row.createdAt ? new Date(row.createdAt).toLocaleDateString() : ''))).filter(Boolean), [bookStallData]);
+  const uniqueCities = useMemo(() => Array.from(new Set(bookStallData.map(row => row.city))).filter(Boolean), [bookStallData]);
+  const uniqueSponsorDates = useMemo(() => Array.from(new Set(sponsorData.map(row => row.createdAt ? new Date(row.createdAt).toLocaleDateString() : ''))).filter(Boolean), [sponsorData]);
+  const uniqueSponsorCities = useMemo(() => Array.from(new Set(sponsorData.map(row => row.city))).filter(Boolean), [sponsorData]);
+
+  const filteredBookStall = useMemo(() => {
+    const q = (debouncedSearch || '').toLowerCase();
+    return bookStallData.filter(row => {
+      const nameMatch = row.fullName.toLowerCase().includes(q);
+      const dateMatch = dateFilter ? (row.createdAt && new Date(row.createdAt).toLocaleDateString() === dateFilter) : true;
+      const cityMatch = cityFilter ? row.city === cityFilter : true;
+      return nameMatch && dateMatch && cityMatch;
+    });
+  }, [bookStallData, debouncedSearch, dateFilter, cityFilter]);
+
+  const filteredSponsor = useMemo(() => {
+    const q = (debouncedSearch || '').toLowerCase();
+    return sponsorData.filter(row => {
+      const nameMatch = row.fullName.toLowerCase().includes(q);
+      const dateMatch = dateFilter ? (row.createdAt && new Date(row.createdAt).toLocaleDateString() === dateFilter) : true;
+      const cityMatch = cityFilter ? row.city === cityFilter : true;
+      return nameMatch && dateMatch && cityMatch;
+    });
+  }, [sponsorData, debouncedSearch, dateFilter, cityFilter]);
+
+  // Paginated slices
+  const paginatedBookStall = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return filteredBookStall.slice(start, start + PAGE_SIZE);
+  }, [filteredBookStall, page]);
+
+  const paginatedSponsor = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return filteredSponsor.slice(start, start + PAGE_SIZE);
+  }, [filteredSponsor, page]);
+
+  // Reset page when filters/search change
+  useEffect(() => setPage(1), [debouncedSearch, dateFilter, cityFilter]);
 
   return (
     <div className="min-h-screen min-w-screen w-screen h-screen flex flex-col bg-gradient-to-br from-green-100 via-blue-50 to-yellow-100 relative overflow-hidden">
@@ -251,9 +322,9 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                 </button>
               </div>
             </div>
-            {loading && <div className="text-center text-blue-600">Loading...</div>}
-            {error && <div className="text-center text-red-600">{error}</div>}
-            {!loading && !error && (
+            {loadingSponsor && <div className="text-center text-blue-600">Loading...</div>}
+            {errorSponsor && <div className="text-center text-red-600">{errorSponsor}</div>}
+            {!loadingSponsor && !errorSponsor && (
               <div className="overflow-x-auto rounded-lg shadow">
                 <table className="min-w-full bg-white border border-gray-200">
                   <thead className="bg-blue-100">
@@ -275,15 +346,17 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                         <td colSpan={9} className="text-center py-6 text-gray-500">No submissions yet.</td>
                       </tr>
                     ) : (
-                      filteredSponsor.map((row, idx) => (
+                      paginatedSponsor.map((row, idx) => {
+                        const globalIdx = (page - 1) * PAGE_SIZE + idx;
+                        return (
                         <tr
                           key={row._id || idx}
-                          className={`hover:bg-blue-50 transition-all duration-400 ${deletingIdx === idx ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}
+                          className={`hover:bg-blue-50 transition-all duration-400 ${deletingIdx === globalIdx ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}
                           style={{ transition: 'opacity 0.4s, transform 0.4s' }}
                         >
-                          {editIdx === idx ? (
+                          {editIdx === globalIdx ? (
                             <>
-                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`SPONSOR${String(idx + 1).padStart(2, '0')}`}</td>
+                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`SPONSOR${String(globalIdx + 1).padStart(2, '0')}`}</td>
                               <td className="py-2 px-4 border-b"><input name="fullName" value={editForm?.fullName || ''} onChange={handleEditChange} className="border rounded px-2 py-1 w-32" /></td>
                               <td className="py-2 px-4 border-b"><input name="businessName" value={editForm?.businessName || ''} onChange={handleEditChange} className="border rounded px-2 py-1 w-32" /></td>
                               <td className="py-2 px-4 border-b"><input name="city" value={editForm?.city || ''} onChange={handleEditChange} className="border rounded px-2 py-1 w-24" /></td>
@@ -295,7 +368,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                             </>
                           ) : (
                             <>
-                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`SPONSOR${String(idx + 1).padStart(2, '0')}`}</td>
+                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`SPONSOR${String(globalIdx + 1).padStart(2, '0')}`}</td>
                               <td className="py-2 px-4 border-b">{row.fullName}</td>
                               <td className="py-2 px-4 border-b">{row.businessName}</td>
                               <td className="py-2 px-4 border-b">{row.city}</td>
@@ -305,7 +378,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                               <td className="py-2 px-4 border-b">{row.createdAt ? new Date(row.createdAt).toLocaleString() : ''}</td>
                               <td className="py-2 px-4 border-b flex gap-2 justify-center">
                                 <button
-                                  onClick={() => handleEdit(idx, 'sponsor')}
+                                  onClick={() => handleEdit(globalIdx, 'sponsor')}
                                   className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 shadow transition flex items-center justify-center"
                                   title="Edit"
                                   disabled={actionLoading}
@@ -313,7 +386,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                                   <span className="material-icons text-blue-600 text-xl">edit</span>
                                 </button>
                                 <button
-                                  onClick={() => handleDelete(row._id, idx, 'sponsor')}
+                                  onClick={() => handleDelete(row._id, globalIdx, 'sponsor')}
                                   className="p-2 rounded-full bg-red-100 hover:bg-red-200 shadow transition flex items-center justify-center"
                                   title="Delete"
                                   disabled={actionLoading}
@@ -324,10 +397,18 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                             </>
                           )}
                         </tr>
-                      ))
+                      );
+                    })
                     )}
                   </tbody>
                 </table>
+                {/* Pagination controls */}
+                {filteredSponsor.length > PAGE_SIZE && (
+                  <div className="flex justify-end gap-2 mt-3">
+                    <button className="px-3 py-1 bg-gray-200 rounded" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Prev</button>
+                    <button className="px-3 py-1 bg-gray-200 rounded" disabled={(page * PAGE_SIZE) >= filteredSponsor.length} onClick={() => setPage(p => p + 1)}>Next</button>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -397,9 +478,9 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
               </div>
             </div>
             
-            {loading && <div className="text-center text-blue-600">Loading...</div>}
-            {error && <div className="text-center text-red-600">{error}</div>}
-            {!loading && !error && (
+            {loadingBookstall && <div className="text-center text-blue-600">Loading...</div>}
+            {errorBookstall && <div className="text-center text-red-600">{errorBookstall}</div>}
+            {!loadingBookstall && !errorBookstall && (
               <div className="overflow-x-auto rounded-lg shadow">
                 <table className="min-w-full bg-white border border-gray-200">
                   <thead className="bg-blue-100">
@@ -421,15 +502,17 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                         <td colSpan={9} className="text-center py-6 text-gray-500">No submissions yet.</td>
                       </tr>
                     ) : (
-                      filteredBookStall.map((row, idx) => (
+                      paginatedBookStall.map((row, idx) => {
+                        const globalIdx = (page - 1) * PAGE_SIZE + idx;
+                        return (
                         <tr
                           key={row._id || idx}
-                          className={`hover:bg-blue-50 transition-all duration-400 ${deletingIdx === idx ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}
+                          className={`hover:bg-blue-50 transition-all duration-400 ${deletingIdx === globalIdx ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}
                           style={{ transition: 'opacity 0.4s, transform 0.4s' }}
                         >
-                          {editIdx === idx ? (
+                          {editIdx === globalIdx ? (
                             <>
-                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`FOODMECH${String(idx + 1).padStart(2, '0')}`}</td>
+                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`FOODMECH${String(globalIdx + 1).padStart(2, '0')}`}</td>
                               <td className="py-2 px-4 border-b"><input name="fullName" value={editForm?.fullName || ''} onChange={handleEditChange} className="border rounded px-2 py-1 w-32" /></td>
                               <td className="py-2 px-4 border-b"><input name="businessName" value={editForm?.businessName || ''} onChange={handleEditChange} className="border rounded px-2 py-1 w-32" /></td>
                               <td className="py-2 px-4 border-b"><input name="city" value={editForm?.city || ''} onChange={handleEditChange} className="border rounded px-2 py-1 w-24" /></td>
@@ -441,7 +524,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                             </>
                           ) : (
                             <>
-                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`FOODMECH${String(idx + 1).padStart(2, '0')}`}</td>
+                              <td className="py-2 px-4 border-b font-bold text-gray-500">{`FOODMECH${String(globalIdx + 1).padStart(2, '0')}`}</td>
                               <td className="py-2 px-4 border-b">{row.fullName}</td>
                               <td className="py-2 px-4 border-b">{row.businessName}</td>
                               <td className="py-2 px-4 border-b">{row.city}</td>
@@ -451,7 +534,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                               <td className="py-2 px-4 border-b">{row.createdAt ? new Date(row.createdAt).toLocaleString() : ''}</td>
                               <td className="py-2 px-4 border-b flex gap-2 justify-center">
                                 <button
-                                  onClick={() => handleEdit(idx)}
+                                  onClick={() => handleEdit(globalIdx)}
                                   className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 shadow transition flex items-center justify-center"
                                   title="Edit"
                                   disabled={actionLoading}
@@ -459,22 +542,41 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
                                   <span className="material-icons text-blue-600 text-xl">edit</span>
                                 </button>
                                 <button
-                                  onClick={() => handleDelete(row._id, idx)}
+                                  onClick={() => handleDelete(row._id, globalIdx)}
                                   className="p-2 rounded-full bg-red-100 hover:bg-red-200 shadow transition flex items-center justify-center"
                                   title="Delete"
                                   disabled={actionLoading}
                                 >
                                   <span className="material-icons text-red-600 text-xl">delete</span>
                                 </button>
-      {/* Fade animations */}
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      );
+                    })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {/* Pagination controls for Bookstall */}
+            {filteredBookStall.length > PAGE_SIZE && (
+              <div className="flex justify-end gap-2 mt-3">
+                <button className="px-3 py-1 bg-gray-200 rounded" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Prev</button>
+                <button className="px-3 py-1 bg-gray-200 rounded" disabled={(page * PAGE_SIZE) >= filteredBookStall.length} onClick={() => setPage(p => p + 1)}>Next</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      {/* Global modal / styles / icon link */}
       <style>{`
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
         .animate-fade-in { animation: fade-in 0.5s; }
         .animate-fade-out { animation: fade-out 0.5s; }
       `}</style>
-                              </td>
-      {/* Edit Modal */}
       {showModal && editForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg relative animate-fade-in">
@@ -521,20 +623,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
           </div>
         </div>
       )}
-      {/* Google Material Icons CDN */}
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-                            </>
-                          )}
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
     </div>
   );
 }

@@ -5,9 +5,32 @@ const Home = () => {
     <>
       <div
         id="top"
-        className="min-h-screen w-full flex items-center justify-center bg-cover bg-center relative"
-        style={{ backgroundImage: "url('/background 1.png')" }}
+        className="min-h-screen w-full flex items-center justify-center relative overflow-hidden"
       >
+        {/* Background slideshow (absolute, behind content)
+            bgImages array makes it easy to swap images later. 
+            One image chosen now (Expo 2026.png), other two are placeholders you can change.
+        */}
+        {(() => {
+          // default images: first chosen now, next two are random/placeholders
+          const bgImages = [
+            '/Expo 2026.png', // chosen now — you can replace this filename
+            '/f1.webp',       // placeholder 1 — swap later if you want
+            '/images/img_expo_2026.png' // placeholder 2 — swap later if you want
+          ];
+
+          return (
+            <div className="bg-slideshow" aria-hidden="true">
+              {bgImages.map((src, i) => (
+                <div
+                  key={i}
+                  className="bg-slide-item"
+                  style={{ backgroundImage: `url('${src}')` }}
+                />
+              ))}
+            </div>
+          );
+        })()}
         <div className="w-full max-w-6xl flex flex-col items-center text-center px-8 py-16 pt-0 relative z-10">
           {/* ...existing code... */}
           <h1

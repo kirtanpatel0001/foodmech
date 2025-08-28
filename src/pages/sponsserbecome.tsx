@@ -22,7 +22,7 @@ const SponsorBecome: React.FC = () => {
     setError('');
     setSuccess(false);
     try {
-      const res = await fetch('http://localhost:5000/api/sponsor', {
+      const res = await fetch('https://foodmech.onrender.com/api/sponsor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

@@ -20,26 +20,69 @@ const Feedback: React.FC = () => (
        <span> Our Feedback</span>
        <span className="block">Testimonials of Last Exhibition</span>
       </h1>
-      <div className="flex justify-center gap-6 mb-6">
-        {[1, 2, 3, 4].map((i) => (
-          <img
-            key={i}
-            src="/1.png"
-            alt={`Row1-${i}`}
-            className="w-64 h-64 object-contain rounded-lg  "
-          />
-        ))}
-      </div>
-      {/* Second row: 3 images */}
-      <div className="flex justify-center gap-6">
-        {[1, 2, 3].map((i) => (
-          <img
-            key={i}
-            src="/1.png"
-            alt={`Row2-${i}`}
-            className="w-64 h-64 object-contain rounded-lg  "
-          />
-        ))}
+     
+      <div className="w-full max-w-6xl">
+        {/* Short IDs deduplicated from user input */}
+        {/**
+         * IDs: ri1_CK_3PXs, 8iNFYkiLdfU, 6oMbOW73VC8, xrIW_HNH8dU
+         */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            {
+              id: "ri1_CK_3PXs",
+              title: "Visitor Testimonial — Innovative Stand",
+              description: "A visitor shares their experience interacting with our interactive display and samples.",
+            },
+            {
+              id: "8iNFYkiLdfU",
+              title: "Exhibitor Feedback — Seamless Setup",
+              description: "An exhibitor talks about how easy it was to set up and demonstrate products at our booth.",
+            },
+            {
+              id: "6oMbOW73VC8",
+              title: "Customer Review — Product Demo",
+              description: "A short clip of a live product demo and customer reaction at the exhibition.",
+            },
+            {
+              id: "xrIW_HNH8dU",
+              title: "Organizer Note — Great Response",
+              description: "Event organizer provides an overview of attendee engagement and feedback.",
+            },
+          ].map(({ id, title, description }) => (
+            <div
+              key={id}
+              className="w-full rounded-lg overflow-hidden bg-black"
+              style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.15)" }}
+            >
+              {/* Responsive iframe wrapper */}
+              <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+                <iframe
+                  title={`youtube-video-${id}`}
+                  src={`https://www.youtube.com/embed/${id}`}
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+                  frameBorder={0}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Custom caption / link under the video */}
+              <div className="p-3 bg-white text-black">
+                <h3 className="font-semibold text-lg">{title}</h3>
+                <p className="text-sm text-gray-700 mb-2">{description}</p>
+                <a
+                  href={`https://www.youtube.com/watch?v=${id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-sm text-blue-600 hover:underline"
+                >
+                  Watch on YouTube
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </div>

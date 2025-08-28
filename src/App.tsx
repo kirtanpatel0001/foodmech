@@ -3,16 +3,16 @@
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Expo1 from './pages/Expo1';
-import Highlight from './pages/Highlight';
-import BookStall from './pages/BookStall';
-import PrivacyPolicy from './pages/Privacy Policy';
-import ContactUs from './pages/Contact Us';
-import Blog from './pages/Blog';
-import Visitor from './pages/Visitor';
+import { Suspense, lazy, useEffect, useState } from 'react';
+import Home from './pages/Home'; // keep home eagerly for now (critical above-the-fold)
+const Expo1 = lazy(() => import('./pages/Expo1'))
+const Highlight = lazy(() => import('./pages/Highlight'))
+const BookStall = lazy(() => import('./pages/BookStall'))
+const PrivacyPolicy = lazy(() => import('./pages/Privacy Policy'))
+const ContactUs = lazy(() => import('./pages/Contact Us'))
+const Blog = lazy(() => import('./pages/Blog'))
+const Visitor = lazy(() => import('./pages/Visitor'))
 import { BrowserRouter, Routes, Route, useLocation,  } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import AdminLogin from './pages/AdminLogin';
 import AdminPanel from './pages/AdminPanel';
 import Sponsors from './pages/Sponsors';
@@ -64,38 +64,40 @@ export default function App() {
             <>
               <Navbar />
               <main>
-                <Routes>
-                  <Route path="/" element={
-                    <>
-                      <Home />
-                      <Expo1 />
-                      <Highlight />
-                      <VideoSchedule />
-                      <Information />
-                      <Exhibition />
-                      <Exhibitionunder />
-                      <div id="sponsors-section">
-                        <Sponsors />
-                      </div>
-                      <div id="exhibition-benefits-section">
-                        <ExhibitionBenefits />
-                      </div>
-                      <div id="become-sponsor-section">
-                        <SponsorBecome />
-                      </div>
-                      <Partners />
-                      <OurExhibitors />
-                      <div id="feedback-section">
-                        <Feedback />
-                      </div>
-                    </>
-                  } />
-                  <Route path="/bookstall" element={<BookStall />} />
-                  <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-                  <Route path="/contactus" element={<ContactUs />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/visitor" element={<Visitor />} />
-                </Routes>
+                <Suspense fallback={<div aria-busy="true">Loading...</div>}>
+                  <Routes>
+                    <Route path="/" element={
+                      <>
+                        <Home />
+                        <Expo1 />
+                        <Highlight />
+                        <VideoSchedule />
+                        <Information />
+                        <Exhibition />
+                        <Exhibitionunder />
+                        <div id="sponsors-section">
+                          <Sponsors />
+                        </div>
+                        <div id="exhibition-benefits-section">
+                          <ExhibitionBenefits />
+                        </div>
+                        <div id="become-sponsor-section">
+                          <SponsorBecome />
+                        </div>
+                        <Partners />
+                        <OurExhibitors />
+                        <div id="feedback-section">
+                          <Feedback />
+                        </div>
+                      </>
+                    } />
+                    <Route path="/bookstall" element={<BookStall />} />
+                    <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                    <Route path="/contactus" element={<ContactUs />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/visitor" element={<Visitor />} />
+                  </Routes>
+                </Suspense>
               </main>
               <Footer />
             </>
