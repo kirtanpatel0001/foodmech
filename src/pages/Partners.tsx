@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 
 const partners = [
@@ -22,7 +21,6 @@ const partners = [
   }
 ];
 
-
 const Partners: React.FC = () => {
   const [show, setShow] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -36,7 +34,7 @@ const Partners: React.FC = () => {
       return () => clearTimeout(t);
     }
 
-  let timeout: number | undefined;
+    let timeout: number | undefined;
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -59,14 +57,14 @@ const Partners: React.FC = () => {
   }, []);
 
   return (
-  <div ref={containerRef} className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-16 max-h-[700px] w-full mx-auto">
-      <h1 className="text-3xl font-bold mb-10">Associate Partners</h1>
-      <div className="flex flex-row flex-wrap justify-center gap-8 w-full max-w-5xl">
+    <div ref={containerRef} className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-16 w-full mx-auto overflow-hidden">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-10">Associate Partners</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">
         {partners.map((p, i) => (
           <div
             key={p.title}
             className={
-              `flex flex-col items-center bg-gray-300 rounded-2xl shadow-lg px-6 py-6 w-80 min-h-[340px] relative` +
+              `flex flex-col items-center bg-gray-300 rounded-2xl shadow-lg p-6 relative` +
               (show ? ' animate-fade-in-left' : '')
             }
             style={show ? {
@@ -76,11 +74,11 @@ const Partners: React.FC = () => {
             } : {}}
           >
             <div className="w-full flex flex-col items-center mb-3">
-              <img src={p.img} alt={p.title} className="w-30 h-24 object-contain rounded-lg mb-2" />
-              <div className="text-xs font-semibold text-orange-500 text-center mb-1">{p.highlight}</div>
-              <div className="text-xl font-bold text-center mb-2">{p.title}</div>
+              <img src={p.img} alt={p.title} className="w-full h-32 object-contain rounded-lg mb-2" />
+              <div className="text-sm font-semibold text-orange-500 text-center mb-1">{p.highlight}</div>
+              <div className="text-lg sm:text-xl font-bold text-center mb-2">{p.title}</div>
             </div>
-            <div className="text-gray-700 text-center text-base">{p.desc}</div>
+            <div className="text-gray-700 text-center text-sm sm:text-base">{p.desc}</div>
           </div>
         ))}
       </div>
@@ -92,13 +90,10 @@ const Partners: React.FC = () => {
           100% { opacity: 1; transform: translateX(0); }
         }
         .animate-fade-in-left {
-          opacity: 0;
           animation-name: fade-in-left;
-          animation-timing-function: cubic-bezier(0.4,0,0.2,1);
+          animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           animation-fill-mode: both;
           animation-duration: 0.7s;
-          animation-play-state: running;
-          opacity: 1;
         }
       `}</style>
     </div>

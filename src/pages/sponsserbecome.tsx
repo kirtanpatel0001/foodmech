@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 
 const SponsorBecome: React.FC = () => {
@@ -51,33 +49,32 @@ const SponsorBecome: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="relative min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
       {/* Large diagonal background stripes and colored SVGs */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           src="/images/img_background_square.svg"
           alt="background pattern"
-          className="w-[1300px] h-[900px] object-cover opacity-90  left-[-200px] top-[-100px] absolute"
-          style={{ left: '105px', top: '0px' }}
+          className="w-full h-full object-cover opacity-90"
         />
       </div>
 
-      <div className="relative z-10 flex w-full max-w-[1280px] mx-auto py-12 px-4 gap-8">
+      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1280px] mx-auto py-12 gap-8">
         {/* Left: Form and headings */}
         <div className="flex-1 flex flex-col items-center justify-center">
           <div className="w-full max-w-xl mx-auto">
             <div className="text-center mb-4">
-              <h2 className="text-3xl font-bold">Connect with us</h2>
-              <h3 className="text-2xl font-semibold item">Become Our Sponsor</h3>
+              <h2 className="text-2xl sm:text-3xl font-bold">Connect with us</h2>
+              <h3 className="text-xl sm:text-2xl font-semibold">Become Our Sponsor</h3>
             </div>
-            <div className="flex flex-wrap justify-center gap-6 mb-8">
-              <a href="tel:+919898123103" className="flex items-center gap-2 text-lg">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8">
+              <a href="tel:+919898123103" className="flex items-center gap-2 text-sm sm:text-lg">
                 <span>📞</span>+91 98981 23103
               </a>
-              <a href="tel:+919898036959" className="flex items-center gap-2 text-lg">
+              <a href="tel:+919898036959" className="flex items-center gap-2 text-sm sm:text-lg">
                 <span>📞</span>+91 98980 36959
               </a>
-              <a href="tel:+919898072103" className="flex items-center gap-2 text-lg">
+              <a href="tel:+919898072103" className="flex items-center gap-2 text-sm sm:text-lg">
                 <span>📞</span>+91 98980 72103
               </a>
             </div>
@@ -147,23 +144,8 @@ const SponsorBecome: React.FC = () => {
           </div>
         </div>
         {/* Right: Poster image */}
-        <div className="flex-1 flex items-center justify-center">
-          <img src="/images/img_food_mech.png" alt="Food Mech Poster" className="w-full max-w-md rounded-lg shadow-lg" />
-          <img
-            src="/images/img_1_lime_a700.svg"
-            alt="lime stripe"
-            className="absolute left-[840px] top-[-425px] w-[360px] h-[1400px]"
-          />
-          <img
-            src="/images/img_2_amber_a400.svg"
-            alt="amber stripe"
-            className="absolute left-[850px] top-[-437px] w-[365px] h-[1400px]"
-          />
-          <img
-            src="/images/img_3_red_a400.svg"
-            alt="red stripe"
-            className="absolute left-[856px] top-[-427px] w-[370px] h-[1400px]"
-          />
+        <div className="hidden md:flex flex-1 items-center justify-center">
+          <img src="/images/img_food_mech.png" alt="Food Mech Poster" className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-lg shadow-lg" />
         </div>
       </div>
     </div>

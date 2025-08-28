@@ -9,6 +9,27 @@ body {
 @tailwind components;
 @tailwind utilities;
 
+/*
+	Remove page scrolling issues:
+	- Prevent horizontal overflow which often causes an unwanted horizontal scrollbar.
+	- Visually hide scrollbars across browsers while keeping vertical scrolling functional.
+	If you want to fully disable vertical scrolling on all pages (not recommended),
+	change `overflow-x: hidden;` to `overflow: hidden;` on html/body below.
+*/
+
+html, body, #root {
+	overflow-x: hidden;
+}
+
+/* Hide scrollbars visually but preserve scroll behavior */
+body {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Opera */
+}
+
 /* Background slideshow animation */
 .bg-slideshow {
 	position: absolute;
@@ -26,17 +47,21 @@ body {
 	background-repeat: no-repeat;
 	opacity: 0;
 	transform: scale(1.03);
-	animation: slideFade 12s linear infinite;
+	/* total cycle = 10s for 5 images -> each image visible about 2s */
+	animation: slideFade 10s linear infinite;
 }
 .bg-slide-item:nth-child(1) { animation-delay: 0s; }
-.bg-slide-item:nth-child(2) { animation-delay: 4s; }
-.bg-slide-item:nth-child(3) { animation-delay: 8s; }
+.bg-slide-item:nth-child(2) { animation-delay: 2s; }
+.bg-slide-item:nth-child(3) { animation-delay: 4s; }
+.bg-slide-item:nth-child(4) { animation-delay: 6s; }
+.bg-slide-item:nth-child(5) { animation-delay: 8s; }
 
 @keyframes slideFade {
+	/* Adjusted so each image ramps up quickly, stays visible ~2s, then fades out */
 	0% { opacity: 0; transform: scale(1.03); }
-	8% { opacity: 1; transform: scale(1.05); }
-	33% { opacity: 1; transform: scale(1.07); }
-	41% { opacity: 0; transform: scale(1.09); }
+	6% { opacity: 1; transform: scale(1.05); }
+	26% { opacity: 1; transform: scale(1.07); }
+	32% { opacity: 0; transform: scale(1.09); }
 	100% { opacity: 0; transform: scale(1.03); }
 }
 

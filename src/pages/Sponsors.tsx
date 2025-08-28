@@ -1,4 +1,3 @@
-
 import React from "react";
 
 
@@ -82,25 +81,25 @@ const Sponsors: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen w-full flex flex-col items-center  bg-cover bg-center px-2 py-6"
+      className="min-h-screen w-full flex flex-col items-center bg-cover bg-center px-4 sm:px-6 md:px-8 py-6"
       style={{ backgroundImage: "url('/background icons.png')" }}
     >
-      <h1 className="text-4xl font-bold text-center mt-2 mb-4">Our Sponsors</h1>
-      <div className="flex items-center justify-center gap-4 mb-8">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center mt-2 mb-4">Our Sponsors</h1>
+      <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
         <button
-          className={`px-6 py-2 rounded-xl font-semibold  focus:outline-none ${category === 'all' ? 'bg-[#E04B4D] text-white shadow  border-2 border-black' : 'bg-transparent text-black transition-all'}`}
+          className={`px-4 sm:px-6 py-2 rounded-xl font-semibold focus:outline-none ${category === 'all' ? 'bg-[#E04B4D] text-white shadow border-2 border-black' : 'bg-transparent text-black transition-all'}`}
           onClick={() => handleCategory('all')}
         >
           All Sponsor
         </button>
         <button
-          className={`px-6 py-2 rounded-xl font-semibold focus:outline-none ${category === 'title' ? 'bg-[#E04B4D] text-white shadow  border-2 border-black' : 'bg-transparent text-black transition-all'}`}
+          className={`px-4 sm:px-6 py-2 rounded-xl font-semibold focus:outline-none ${category === 'title' ? 'bg-[#E04B4D] text-white shadow border-2 border-black' : 'bg-transparent text-black transition-all'}`}
           onClick={() => handleCategory('title')}
         >
           Title Sponsor
         </button>
         <button
-          className={`px-6 py-2 rounded-xl font-semibold focus:outline-none ${category === 'main' ? 'bg-[#E04B4D] text-white shadow  border-2 border-black' : 'bg-transparent text-black transition-all '}`}
+          className={`px-4 sm:px-6 py-2 rounded-xl font-semibold focus:outline-none ${category === 'main' ? 'bg-[#E04B4D] text-white shadow border-2 border-black' : 'bg-transparent text-black transition-all'}`}
           onClick={() => handleCategory('main')}
         >
           Main Sponsor
@@ -108,7 +107,7 @@ const Sponsors: React.FC = () => {
       </div>
       <div
         className={
-          `w-full max-w-5xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 items-center justify-center ` +
+          `w-full max-w-5xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 items-center justify-center ` +
           ((category === 'title' || category === 'main' || category === 'all')
             ? (showAnim ? slideUpClass : slideUpHiddenClass)
             : '')
@@ -118,7 +117,7 @@ const Sponsors: React.FC = () => {
           <div
             key={idx}
             className={
-              `flex items-center justify-center  rounded-lg p-2 md:p-4 aspect-[4/3] ` +
+              `flex items-center justify-center rounded-lg p-2 sm:p-3 md:p-4 aspect-[4/3] ` +
               getLogoAnimClass(logoAnim) +
               ` hover:scale-105 hover:shadow-2xl transform-gpu`
             }
@@ -127,7 +126,7 @@ const Sponsors: React.FC = () => {
             <img
               src={src}
               alt={`Sponsor ${idx + 1}`}
-              className="object-contain w-full h-full max-h-28 md:max-h-32"
+              className="object-contain w-full h-full max-h-24 sm:max-h-28 md:max-h-32"
               loading="lazy"
             />
           </div>
