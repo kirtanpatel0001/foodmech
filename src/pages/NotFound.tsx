@@ -1,5 +1,6 @@
+import type { JSX } from "react";
 
-const Blog = () => {
+const NotFound = (): JSX.Element => {
   return (
     <main className="min-h-screen w-full flex items-center justify-center bg-white px-4 py-12">
       <div className="w-full max-w-4xl mx-auto">
@@ -23,7 +24,12 @@ const Blog = () => {
                   Go to homepage
                 </a>
 
-               
+                <a
+                  href="#contact"
+                  className="inline-block px-5 py-2 rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 transition"
+                >
+                  Contact support
+                </a>
               </div>
             </div>
 
@@ -43,4 +49,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default NotFound;

@@ -1,7 +1,7 @@
 import React from "react";
 import type { JSX } from "react";
 
-// Card component implementation
+// Card component (reused)
 interface CardProps {
   className?: string;
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ className = "", children }) => {
   return (
-    <div className={`rounded-lg border bg-card text-card-foreground  bg-white shadow-sm ${className}`}>
+    <div className={`rounded-lg border bg-card text-card-foreground bg-white shadow-sm ${className}`}>
       {children}
     </div>
   );
@@ -21,11 +21,7 @@ interface CardContentProps {
 }
 
 const CardContent: React.FC<CardContentProps> = ({ className = "", children }) => {
-  return (
-    <div className={`p-6 pt-0 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`p-6 pt-0 ${className}`}>{children}</div>;
 };
 
 // Main component
@@ -43,48 +39,50 @@ export const SingleFileSponsorship = (): JSX.Element => {
     "Event swag bags",
     "Recognition in press releases",
     "Photo booths and selfies",
-    "Participation in panel discussions",
-    "Customized photo for stall",
-     
+    
   ];
 
-
-
   return (
-    <main className="bg-transparent w-screen h-screen min-h-screen min-w-screen overflow-hidden flex items-center justify-center">
+    <main className="bg-transparent w-screen h-screen min-h-screen min-w-screen flex items-center justify-center overflow-hidden">
       <div className="relative w-full h-full flex items-center justify-center">
-        <div className="absolute inset-0 rounded-[80px] bg-[linear-gradient(134deg,rgba(185,238,221,0.2)_0%,rgba(185,238,221,0.44)_100%)] z-0" />
-        
-        {/* Main content */}
-         <div>
-          <img src="public/background icon.png"  />
+        {/* Background Image (full-screen) */}
+        <div className="absolute inset-0 z-0">
+          <img src="/background icon.png" alt="Background" className="w-full h-full object-cover opacity-20" />
         </div>
-        <section className="absolute inset-0 flex flex-col items-center justify-center">
-          <header className="[font-family:'Kantumruy_Pro',Helvetica] font-semibold text-black text-[43px] text-center tracking-[0] leading-[normal] whitespace-nowrap mb-8 mt-8">
+
+        {/* Gradient overlay (keeps the artwork visible but not clipped) */}
+        <div className="absolute inset-0 bg-[linear-gradient(134deg,rgba(185,238,221,0.2)_0%,rgba(185,238,221,0.44)_100%)] z-10" />
+
+  {/* Content (no internal scroll) */}
+  <section className="absolute inset-0 z-20 flex flex-col items-center justify-start overflow-y-hidden px-4 sm:px-6 lg:px-12 py-6 sm:py-10">
+          <header className="[font-family:'Kantumruy_Pro',Helvetica] font-semibold text-black text-2xl sm:text-3xl md:text-4xl lg:text-[43px] text-center tracking-[0] leading-[normal] mb-6 sm:mb-8">
             Why Sponsorship?
           </header>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-[35px]">
+
+          {/* Responsive grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-x-6 sm:gap-y-6 md:gap-x-8 md:gap-y-[35px]">
             {sponsorshipBenefits.map((benefit, index) => (
               <Card
                 key={`benefit-${index}`}
-                className="w-[400px] h-[60px]  shadow-none"
+                className="w-full max-w-md mx-auto shadow-none"
               >
-                <CardContent className="flex items-center justify-center bg-white rounded-[20px]  h-[60px] px-[40px] py-[2px]">
-                  <div className="relative w-fit mt-[-1.00px] [font-family:'Kantumruy_Pro',Helvetica] font-medium text-black text-[24px] text-center tracking-[0] leading-[normal] whitespace-nowrap">
+                <CardContent className="flex items-center justify-center bg-white rounded-[20px] min-h-[60px] px-4 py-2">
+                  <div className="relative w-fit [font-family:'Kantumruy_Pro',Helvetica] font-medium text-black text-base sm:text-lg md:text-xl text-center leading-normal">
                     {benefit}
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-          
+          {/* Add some space at bottom so last item isn’t cut off */}
+          <div className="h-10 sm:h-16" />
         </section>
       </div>
     </main>
   );
 };
 
-// CSS styles as a string (to be added to a style tag)
+// CSS styles as a string
 export const sponsorshipStyles = `
 @import url("https://fonts.googleapis.com/css?family=Kantumruy+Pro:500,600");
 
@@ -101,7 +99,7 @@ export const sponsorshipStyles = `
   background-color: hsl(var(--card));
 }
 
-.text-card-foreground { B
+.text-card-foreground {
   color: hsl(var(--card-foreground));
 }
 
@@ -119,11 +117,11 @@ export const sponsorshipStyles = `
 }
 `;
 
-// Complete App component that can be used standalone
+// Complete App
 export const CompleteApp = (): JSX.Element => {
   React.useEffect(() => {
     // Inject styles
-    const styleElement = document.createElement('style');
+    const styleElement = document.createElement("style");
     styleElement.textContent = sponsorshipStyles;
     document.head.appendChild(styleElement);
 
@@ -136,7 +134,3 @@ export const CompleteApp = (): JSX.Element => {
 };
 
 export default CompleteApp;
-
-
-
-// THIS IS AI GENRATE CODE  AND  THIS TYPE OF CODE CAN BE USED FOR CREATING COMPONENTS IN REACT
