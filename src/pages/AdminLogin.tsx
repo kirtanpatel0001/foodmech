@@ -31,7 +31,7 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
         className="relative z-10 bg-white/90 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-full max-w-md flex flex-col items-center animate-fade-in"
         style={{ boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)' }}
       >
-        <img src="/logo1.png" alt="FoodMech Logo" className="w-24 h-24 mb-4 drop-shadow-lg animate-bounce-slow" />
+        <img src="/images/logo1\.png" alt="FoodMech Logo" className="w-24 h-24 mb-4 drop-shadow-lg animate-bounce-slow" />
         <h2 className="text-3xl font-extrabold mb-2 text-center text-blue-700 tracking-tight">Admin Login</h2>
         <p className="mb-6 text-center text-gray-500 font-medium">Welcome to the FoodMech Admin Portal</p>
         <input
@@ -95,3 +95,4 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
     </div>
   );
 }
+

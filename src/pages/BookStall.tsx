@@ -71,7 +71,7 @@ const BookStall: React.FC = () => {
           <div className="w-full max-w-xl mx-auto">
             <div className="text-center mb-4">
               <h2 className="text-2xl md:text-3xl font-bold">Connect with us</h2>
-              <h3 className="text-xl md:text-2xl font-semibold">Become Our Sponsor</h3>
+              <h3 className="text-xl md:text-2xl font-semibold">Book Stall</h3>
             </div>
             <div className="flex flex-wrap justify-center gap-6 mb-8">
               <a href="tel:+919898123103" className="flex items-center gap-2 text-lg">

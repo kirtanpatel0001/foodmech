@@ -7,10 +7,10 @@ import "../index.css";
 
 const highlights = [
   // public/ files are served from the site root in Vite — use root paths
-  { src: "/f1.webp", alt: "Highlight 1" },
-  { src: "/f2.webp", alt: "Highlight 2" },
-  { src: "/f3.webp", alt: "Highlight 3" },
-  { src: "/f4.webp", alt: "Highlight 4" },
+  { src: "/images/f1.webp", alt: "Highlight 1" },
+  { src: "/images/f2.webp", alt: "Highlight 2" },
+  { src: "/images/f3.webp", alt: "Highlight 3" },
+  { src: "/images/f4.webp", alt: "Highlight 4" },
 ];
 
 export default function Exhibition() {
@@ -168,6 +168,7 @@ export default function Exhibition() {
     </div>
   );
 }
+
 
 
 

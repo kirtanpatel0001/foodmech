@@ -25,7 +25,7 @@ const ContactUs: React.FC = () => {
       <div className="w-full">
         <div
           className="w-full h-48 md:h-64 lg:h-72 bg-center bg-cover flex items-center justify-center"
-          style={{ backgroundImage: `url('/privacy policy1.png')` }}
+          style={{ backgroundImage: `url('/images/privacy\ policy1\.png')` }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">Contact Us</h1>
         </div>
@@ -100,4 +100,5 @@ const ContactUs: React.FC = () => {
 };
 
 export default ContactUs;
+
 

@@ -47,7 +47,7 @@ export const SingleFileSponsorship = (): JSX.Element => {
       <div className="relative w-full h-full flex items-center justify-center">
         {/* Background Image (full-screen) */}
         <div className="absolute inset-0 z-0">
-          <img src="/background icon.png" alt="Background" className="w-full h-full object-cover opacity-20" />
+          <img src="/images/background icon.png" alt="Background" className="w-full h-full object-cover opacity-20" />
         </div>
 
         {/* Gradient overlay (keeps the artwork visible but not clipped) */}

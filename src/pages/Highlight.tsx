@@ -5,22 +5,49 @@ import "../App.css";
 import "../index.css";
 
 const highlights = [
-  { src: "public/4.jpeg.jpg", alt: "Highlight 1" },
-  { src: "public/5.jpeg.jpg", alt: "Highlight 2" },
-  { src: "public/6.jpeg.jpg", alt: "Highlight 3" },
-  { src: "public/7.jpeg.jpg", alt: "Highlight 4" },
-  { src: "public/DJI_0251.png", alt: "Highlight 5" },
-  { src: "public/DJI_0278 (1).png", alt: "Highlight 6" },
-  { src: "public/DSC_0095.JPG", alt: "Highlight 7" },
-  { src: "public/DSC_0115.JPG", alt: "Highlight 8" },
-  { src: "public/DSC_0136.JPG", alt: "Highlight 9" },
-  { src: "public/DSC_0136.JPG", alt: "Highlight 10" },
-  { src: "public/DSC_8292.JPG", alt: "Highlight 11" },
-  { src: "public/DSC01624.JPG", alt: "Highlight 12" },
-  { src: "public/DSC01952.JPG", alt: "Highlight 13" },
-  
-
-
+  { src: "/images/3.png", alt: "Highlight 1" },
+  { src: "/images/5.jpeg.jpg", alt: "Highlight 2" },
+  { src: "/images/6.jpeg.jpg", alt: "Highlight 3" },
+  { src: "/images/7.jpeg.jpg", alt: "Highlight 4" },
+  { src: "/images/DJI_0251.png", alt: "Highlight 5" },
+  { src: "/images/DJI_0278 (1).png", alt: "Highlight 6" },
+  { src: "/images/DSC_0095.JPG", alt: "Highlight 7" },
+  { src: "/images/DSC_0115.JPG", alt: "Highlight 8" },
+  { src: "/images/DSC_0136.JPG", alt: "Highlight 9" },
+  { src: "/images/DSC_8292.JPG", alt: "Highlight 10" },
+  { src: "/images/DSC01624.JPG", alt: "Highlight 11" },
+  { src: "/images/DSC01952.JPG", alt: "Highlight 12" },
+  { src: "/images/8J5A7225.JPG", alt: "Highlight 13" },
+  { src: "/highlight images/164-1024x683.jpg", alt: "Highlight 14" },
+  { src: "/highlight images/243A1980.JPG", alt: "Highlight 15" },
+  { src: "/highlight images/DSC_0013.JPG", alt: "Highlight 16" },
+  { src: "/highlight images/DSC_0018.JPG", alt: "Highlight 17" },
+  { src: "/highlight images/DSC00514.JPG", alt: "Highlight 18" },
+  { src: "/highlight images/DSC00533.JPG", alt: "Highlight 19" },
+  { src: "/highlight images/DSC00574.JPG", alt: "Highlight 20" },
+  { src: "/highlight images/DSC00592.JPG", alt: "Highlight 21" },
+  { src: "/highlight images/DSC00593.JPG", alt: "Highlight 22" },
+  { src: "/highlight images/DSC00600.JPG", alt: "Highlight 23" },
+  { src: "/highlight images/DSC00602.JPG", alt: "Highlight 24" },
+  { src: "/highlight images/DSC00783.JPG", alt: "Highlight 25" },
+  { src: "/highlight images/DSC00788.JPG", alt: "Highlight 26" },
+  { src: "/highlight images/DSC00910.JPG", alt: "Highlight 27" },
+  { src: "/highlight images/DSC00941.JPG", alt: "Highlight 28" },
+  { src: "/highlight images/DSC00991.JPG", alt: "Highlight 29" },
+  { src: "/highlight images/DSC00994.JPG", alt: "Highlight 30" },
+  { src: "/highlight images/DSC01023.JPG", alt: "Highlight 31" },
+  { src: "/highlight images/DSC01027.JPG", alt: "Highlight 32" },
+  { src: "/highlight images/DSC01137.JPG", alt: "Highlight 33" },
+  { src: "/highlight images/DSC01160.JPG", alt: "Highlight 34" },
+  { src: "/highlight images/DSC01216.JPG", alt: "Highlight 35" },
+  { src: "/highlight images/DSC01265.JPG", alt: "Highlight 36" },
+  { src: "/highlight images/DSC01269.JPG", alt: "Highlight 37" },
+  { src: "/highlight images/DSC01275.JPG", alt: "Highlight 38" },
+  { src: "/highlight images/DSCF3440.JPG", alt: "Highlight 39" },
+  { src: "/highlight images/DSCF3442.JPG", alt: "Highlight 40" },
+  { src: "/highlight images/DSCF3577.JPG", alt: "Highlight 41" },
+  { src: "/highlight images/R6II8493.JPG", alt: "Highlight 42" },
+  { src: "/highlight images/RZ6_6620.JPG", alt: "Highlight 43" }
 ];
 
 export default function Highlight() {
@@ -37,6 +64,16 @@ export default function Highlight() {
     return () => clearInterval(interval);
   }, []);
 
+  // Navigation handlers
+  const goTo = (dir: number) => {
+    setActive((prev) => {
+      const n = highlights.length;
+      return (prev + dir + n) % n;
+    });
+  };
+  const handlePrev = () => goTo(-1);
+  const handleNext = () => goTo(1);
+
   // active index controls which image is center; images animate based on their delta from active
 
   return (
@@ -52,6 +89,16 @@ export default function Highlight() {
         className="relative w-full flex justify-center items-center"
         style={{ height: isSmallViewport ? 300 : 420, perspective: isSmallViewport ? 600 : 800 }}
       >
+        {/* Left icon button */}
+        <button
+          onClick={handlePrev}
+          aria-label="Previous"
+          className="absolute left-2 md:left-8 z-20 bg-white/80 rounded-full shadow p-2 hover:bg-blue-100 transition"
+          style={{ top: '50%', transform: 'translateY(-50%)' }}
+        >
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+        </button>
+
         <div
           className="relative flex items-center justify-center"
           style={{ width: '100%', maxWidth: isSmallViewport ? 420 : 680, height: isSmallViewport ? 300 : 420 }}
@@ -116,6 +163,16 @@ export default function Highlight() {
             );
           })}
         </div>
+
+        {/* Right icon button */}
+        <button
+          onClick={handleNext}
+          aria-label="Next"
+          className="absolute right-2 md:right-8 z-20 bg-white/80 rounded-full shadow p-2 hover:bg-blue-100 transition"
+          style={{ top: '50%', transform: 'translateY(-50%)' }}
+        >
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,52 @@
 import ResponsiveImage from '../components/ResponsiveImage';
+import { useState, useEffect, useMemo } from 'react';
+
+// Module-level slides constant (stable reference) — all slides use white text by default
+const SLIDES = [
+  { src: '/images/background 102.png.jpg', textColor: 'white', priority: true },
+  { src: '/images/background 103.png.jpg', textColor: 'white', priority: true },
+  { src: '/images/background 104.png.jpg', textColor: 'white', priority: true },
+  { src: '/images/background 105.png.jpg', textColor: 'white', priority: true },
+  { src: '/images/background 106.png.jpg', textColor: 'white', priority: true },
+  { src: '/images/background 107.png.jpg', textColor: 'white', priority: true },
+  { src: '/images/sawamiji.JPG', textColor: 'white', priority: false },
+];
 
 const Home = () => {
+  // Ensure priority slides appear before the others (useMemo to avoid recompute)
+  const orderedSlides = useMemo(() => {
+    const priority = SLIDES.filter((s) => s.priority === true);
+    const rest = SLIDES.filter((s) => !s.priority);
+    return [...priority, ...rest];
+  }, []);
+
+  // Default text color — will be overridden per-slide when available
+  const defaultTextColor = 'white';
+
+  // Slideshow state
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Auto-advance slideshow every 4 seconds
+  useEffect(() => {
+    if (orderedSlides.length === 0) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % orderedSlides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [orderedSlides.length]);
+
+  // Keep activeIndex in-range when slides change
+  useEffect(() => {
+    if (orderedSlides.length === 0) return;
+    setActiveIndex((prev) => prev % orderedSlides.length);
+  }, [orderedSlides.length]);
+
+  // Current text color
+  // derive current slide and its text color safely
+  const currentIndex = orderedSlides.length > 0 ? activeIndex % orderedSlides.length : 0;
+  const currentSlide = orderedSlides[currentIndex] || null;
+  const textColor = (currentSlide && currentSlide.textColor) || defaultTextColor;
+
   return (
     <>
       <div
@@ -8,41 +54,48 @@ const Home = () => {
         className="min-h-screen w-full flex items-center justify-center relative overflow-hidden"
       >
         {/* Background slideshow (absolute, behind content) */}
-        {(() => {
-          const bgImages = [
-              '/background 102.png.jpg',
-              '/background 103.png.jpg',
-              '/background 104.png.jpg',
-              '/background 105.png.jpg',
-              '/background 106.png.jpg',
-              '/background 107.png.jpg',
-              
-          ];
-
-          return (
-            <div className="bg-slideshow" aria-hidden="true">
-              {bgImages.map((src, i) => (
-                <div
-                  key={i}
-                  className="bg-slide-item"
-                  style={{ backgroundImage: `url('${src}')` }}
-                />
-              ))}
-            </div>
-          );
-        })()}
+        <div className="bg-slideshow" aria-hidden="true">
+          {orderedSlides.map((slide, i) => (
+            <div
+              key={i}
+              className="bg-slide-item"
+              style={{
+                backgroundImage: `url('${slide.src}')`,
+                opacity: i === activeIndex ? 1 : 0,
+                transition: 'opacity 0.8s',
+                position: 'absolute',
+                inset: 0,
+                zIndex: 0,
+              }}
+            />
+          ))}
+        </div>
+        {/* Overlay to guarantee text contrast. If a slide requests black text we keep the overlay transparent. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 5,
+            pointerEvents: 'none',
+            background: orderedSlides[activeIndex] && orderedSlides[activeIndex].textColor === 'black'
+              ? 'transparent'
+              : 'linear-gradient(rgba(0,0,0,0.42), rgba(0,0,0,0.42))',
+            transition: 'background 300ms ease',
+          }}
+        />
 
         <div className="w-full max-w-6xl flex flex-col items-center text-center px-8 py-16 pt-0 relative z-10">
           <h1
-            className="font-extrabold leading-tight text-black mb-4 text-3xl sm:text-4xl md:text-[54px]"
-            style={{ fontFamily: 'Kantumruy Pro, sans-serif' }}
+            className="font-extrabold leading-tight mb-4 text-3xl sm:text-4xl md:text-[54px]"
+            style={{ fontFamily: 'Kantumruy Pro, sans-serif', color: textColor }}
           >
             Experience Asia’s Premier
           </h1>
 
           <h2
-            className="font-extrabold leading-tight text-black mb-4 text-3xl sm:text-4xl md:text-[54px]"
-            style={{ fontFamily: 'Kantumruy Pro, sans-serif' }}
+            className="font-extrabold leading-tight mb-4 text-3xl sm:text-4xl md:text-[54px]"
+            style={{ fontFamily: 'Kantumruy Pro, sans-serif', color: textColor }}
           >
             Food Industry Exhibition
           </h2>
@@ -67,12 +120,12 @@ const Home = () => {
               />
             </span>
 
-            <span className="text-black text-2xl md:text-3xl lg:text-4xl font-bold">
+            <span className="text-2xl md:text-3xl lg:text-4xl font-bold" style={{ color: textColor }}>
               - bringing Innovation,
             </span>
           </div>
 
-          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-8">
+          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-8" style={{ color: textColor }}>
             Opportunities & Networking
           </h3>
 
@@ -83,20 +136,20 @@ const Home = () => {
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-md" style={{ marginLeft: '5px' }}>
                   {/* responsive icon - any image will be sized to 36x36 by the component */}
-                  <ResponsiveImage src="/11.png" alt="calendar" size={36} />
+                  <ResponsiveImage src="/images/calander.png" alt="calendar" size={36} />
                 </div>
                 <div className="text-left" style={{ fontFamily: 'Poppins, sans-serif', fontSize: 16 }}>
-                  <div className="font-bold text-black">6–9 February , 2026</div>
+                  <div className="font-bold" style={{ color: textColor }}>6–9 February , 2026</div>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-md" style={{ marginLeft: '20px' }}>
-                  <ResponsiveImage src="/location.png" alt="location" size={32} />
+                  <ResponsiveImage src="/images/loc.png" alt="location" size={32} />
                 </div>
                 <div className="text-left" style={{ fontFamily: 'Poppins, sans-serif', fontSize: 16 }}>
-                  <div className="font-bold text-black">Vanita Vishram Ground</div>
-                  <div className="text-black">Surat, Gujarat</div>
+                  <div className="font-bold" style={{ color: textColor }}>Vanita Vishram Ground</div>
+                  <div style={{ color: textColor }}>Surat, Gujarat</div>
                 </div>
               </div>
             </div>

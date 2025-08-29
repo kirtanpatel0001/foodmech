@@ -47,7 +47,7 @@ const Navbar = () => {
       <nav className="w-full bg-white flex items-center justify-between px-6 md:px-8 py-2 font-[Kantumruy_Pro] text-[16px] shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center">
         <Link to="/">
-          <img src="/logo1.png" alt="Food Mech Logo" className="h-12 w-auto mr-4" />
+          <img src="public\images\logo3.png" alt="Food Mech Logo" className="h-16 w-30 mr-4" />
         </Link>
       </div>
 
@@ -77,8 +77,8 @@ const Navbar = () => {
         >
           Become Sponsor
         </a>
-        <Link to="/blog" className="font-bold text-sm hover:text-pink-600">Blog</Link>
-        <Link to="/visitor"  className="ml-4 px-5 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600 transition-all border-2 border-black">Visitor</Link>
+        {/* <Link to="/blog" className="font-bold text-sm hover:text-pink-600">Blog</Link> */}
+        <Link to="/visitor"  className="ml-4 px-5 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600 transition-all border-2 border-black">Visitor Pass</Link>
         <Link to="/bookstall" className="ml-4 px-5 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600 transition-all border-2 border-black">Book Stall</Link>
       </div>
 
@@ -146,3 +146,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

@@ -2,19 +2,19 @@ import React, { useEffect, useState, useRef } from "react";
 
 const partners = [
   {
-    img: "/images/img_whatsapp_image_170x326.png",
+    img: "public/images/WhatsApp_Image_2025-08-08_at_18.04.03_debdd0e2-removebg-preview 1.png",
     title: "FOOD NI VAAT",
     desc: "FOOD NI VAAT is a Food Business Magazine, Food Industry Magazine or Food News and Samachar.",
     highlight: "A Talk About Food Industry..."
   },
   {
-    img: "/images/img_whatsapp_image_2025_08_08_182x326.png",
+    img: "public/images/WhatsApp Image 2025-08-08 at 18.04.04_e4a757af 1.png",
     title: "KUBER PUBLICITY",
     desc: "Kuber Publicity in Yogi Chowk, Surat is known to satisfactorily cater to the demands of its customer base.",
     highlight: "ADVERTISING & BRANDING SOLUTION"
   },
   {
-    img: "/images/img_whatsapp_image_2025_08_08.png",
+    img: "public/images/WhatsApp Image 2025-08-08 at 18.04.04_2689b1d0 1.png",
     title: "D3 DESIGNNS",
     desc: "Our passion for what we do and how we do it empowers us to build brands people believe in.",
     highlight: "BRANDING | MARKETING | CONSULTING"

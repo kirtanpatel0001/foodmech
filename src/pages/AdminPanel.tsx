@@ -235,7 +235,7 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
       {/* Modern sticky navbar */}
       <nav className="sticky top-0 z-20 flex items-center justify-between px-10 py-4 bg-white/95 backdrop-blur-lg shadow-lg border-b border-blue-100">
         <div className="flex items-center gap-4">
-          <img src="/logo1.png" alt="FoodMech Logo" className="w-30 h-20 object-contain drop-shadow-xl animate-bounce-slow" style={{maxHeight:'60px'}} />
+          <img src="/images/logo1\.png" alt="FoodMech Logo" className="w-30 h-20 object-contain drop-shadow-xl animate-bounce-slow" style={{maxHeight:'60px'}} />
           
         </div>
         <div className="flex gap-2">
@@ -627,3 +627,4 @@ export default function AdminPanel({ onSignOut }: { onSignOut: () => void }) {
     </div>
   );
 }
+

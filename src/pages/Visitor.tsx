@@ -7,8 +7,10 @@ const Visitor: React.FC = () => {
     visitorType: 'B2B',
     mobile: '',
     email: '',
-    businessCategory: ''
+    businessCategory: '',
+    numberOfPerson: ''
   });
+  const [showPersons, setShowPersons] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,13 +22,23 @@ const Visitor: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Handle visitorType change for fade effect
+  const handleVisitorTypeChange = (type: string) => {
+    setFormData(prev => ({ ...prev, visitorType: type }));
+    if (type === 'B2C') {
+      setShowPersons(true);
+    } else {
+      setShowPersons(false);
+    }
+  };
+
   return (
     <div className="relative bg-gray-100">
       {/* Top hero with image */}
       <div className="w-full">
         <div
           className="w-full h-48 md:h-64 lg:h-72 bg-center bg-cover flex items-center justify-center"
-          style={{ backgroundImage: `url('/visitor pass.png')` }}
+          style={{ backgroundImage: `url('/images/visitor\ pass\.png')` }}
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">Visitor Pass</h1>
         </div>
@@ -65,22 +77,38 @@ const Visitor: React.FC = () => {
                   name="visitorType"
                   value="B2B"
                   checked={formData.visitorType === 'B2B'}
-                  onChange={() => setFormData(prev => ({ ...prev, visitorType: 'B2B' }))}
+                  onChange={() => handleVisitorTypeChange('B2B')}
                   className="accent-green-500"
                 />
                 B2B
               </label>
-              <label className="flex items-center gap-">
+              <label className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="visitorType"
                   value="B2C"
                   checked={formData.visitorType === 'B2C'}
-                  onChange={() => setFormData(prev => ({ ...prev, visitorType: 'B2C' }))}
+                  onChange={() => handleVisitorTypeChange('B2C')}
                   className="accent-green-500"
                 />
                 B2C
               </label>
+            </div>
+
+            {/* Fade in/out number of person input for B2C */}
+            <div
+              className={`transition-opacity duration-500 ${showPersons ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}
+              style={{ marginBottom: showPersons ? '1rem' : '0', pointerEvents: showPersons ? 'auto' : 'none' }}
+            >
+              <input
+                type="number"
+                name="numberOfPerson"
+                min="1"
+                placeholder="Number of Person"
+                value={formData.numberOfPerson}
+                onChange={handleChange}
+                className="w-full h-10 md:h-12 px-3 bg-white border border-gray-300 rounded-md"
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -132,3 +160,4 @@ const Visitor: React.FC = () => {
 };
 
 export default Visitor;
+

@@ -1,5 +1,5 @@
 // Replace with your actual background image path
-const backgroundImg = "/Expo 2026.png";
+const backgroundImg = "public/images/Expo 2026.png";
 
 const Expo1 = () => {
   return (
@@ -15,12 +15,12 @@ const Expo1 = () => {
         {/* Decorative accents: hide on small screens to avoid overlap, show on md+ to preserve desktop look */}
         {/* Decorative rectangles: visible on mobile but smaller and shifted to avoid overlap; md+ keeps original size/position */}
         <img
-          src="/Rectangle 2.png"
+          src="public\images\Rectangle 2.png"
           alt="Decorative"
           className="block w-28 md:w-80 h-auto absolute -top-2 -right-2 md:-top-6 md:-right-6"
         />
         <img
-          src="/Rectangle 1.png"
+          src="public\images\Rectangle 1.png"
           alt="Decorative"
           className="block w-28 md:w-80 h-auto absolute -bottom-2 -left-2 md:-bottom-6 md:-left-6"
         />
@@ -43,3 +43,4 @@ const Expo1 = () => {
 
 export default Expo1;
     
+

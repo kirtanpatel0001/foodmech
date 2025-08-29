@@ -74,12 +74,12 @@ const Information = () => {
 
             <div className="flex flex-row flex-wrap items-center text-sm md:text-sm text-gray-800 mt-1 gap-4">
               <span className="flex items-center gap-2">
-                  <img src="/location.png" alt="location" className="w-4 h-4 md:w-5 md:h-5 inline-block" style={{marginLeft: '12px', marginRight: '8px'}} />
+                  <img src="public/images/location.png" alt="location" className="w-4 h-4 md:w-5 md:h-5 inline-block" style={{marginLeft: '12px', marginRight: '8px'}} />
                 <span className="whitespace-nowrap">Vanita Vishram Ground</span>
                 <span className="hidden sm:inline">, Surat, Gujrat</span>
               </span>
               <span className="flex items-center gap-2">
-                  <img src="/clock.png" alt="clock" className="w-4 h-4 md:w-5 md:h-5 inline-block" style={{marginRight: '8px'}} />
+                  <img src="public/images/clock.png" alt="clock" className="w-4 h-4 md:w-5 md:h-5 inline-block" style={{marginRight: '8px'}} />
                 <span className="whitespace-nowrap">10:00 - 6:00</span>
               </span>
             </div>
@@ -90,3 +90,4 @@ const Information = () => {
 };
 
 export default Information;
+

@@ -82,7 +82,7 @@ const Sponsors: React.FC = () => {
   return (
     <div
       className="min-h-screen w-full flex flex-col items-center bg-cover bg-center px-4 sm:px-6 md:px-8 py-6"
-      style={{ backgroundImage: "url('/background icons.png')" }}
+      style={{ backgroundImage: "url('/images/background\ icons\.png')" }}
     >
       <h1 className="text-3xl sm:text-4xl font-bold text-center mt-2 mb-4">Our Sponsors</h1>
       <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
@@ -137,3 +137,4 @@ const Sponsors: React.FC = () => {
 };
 
 export default Sponsors;
+
